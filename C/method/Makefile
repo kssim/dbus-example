@@ -1,6 +1,6 @@
 CC = gcc
-OPTIONS = -O3 -std=c99
-LIB = -ldbus-1 -lpthread -lrt
+OPTIONS = -O3 -std=gnu99
+LIB = -ldbus-1
 INCLUDE = -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include
 
 all : clean client server

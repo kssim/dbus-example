@@ -10,7 +10,7 @@ int sendSignal(char *signalParam) {
 
     dbus_error_init(&error);
 
-    message = dbus_message_new_signal(DBUS_SIGNAL_PATH, DBUS_BUS_INTERFACE, DBUS_SIGNAL_NAME);
+    message = dbus_message_new_signal(DBUS_BUS_INTERFACE_PATH, DBUS_BUS_INTERFACE, DBUS_SIGNAL_NAME);
     if (message == NULL) {
         fprintf(stderr, "Message is NULL.\n");
         return -1;
