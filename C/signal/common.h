@@ -11,4 +11,9 @@
 #define DBUS_SIGNAL_PATH        "/com/kssim/test/bus"
 #define DBUS_SIGNAL_NAME        "SignalTest"
 
+DBusConnection *g_connection;
+
+int initConnection(void);
+int requestBusName(const char* busName);
+
 #endif //__COMMON_H__
