@@ -1,18 +1,13 @@
 #include <string.h>
-#include <unistd.h>
 #include "common.h"
 
 extern DBusConnection *g_connection;
 
-int waitSignal(void) {
-    DBusMessage *message;
-    DBusMessageIter args;
+int setReceiveSignal() {
     DBusError error;
-    char *signalParam;
     char busRule[BUFSIZ];
 
     dbus_error_init(&error);
-    printf("Waiting signal message with interface '%s'\n", DBUS_BUS_INTERFACE);
 
     memset(busRule, 0x0, BUFSIZ);
     snprintf(busRule, BUFSIZ, "type='signal', interface='%s'", DBUS_BUS_INTERFACE);
@@ -26,6 +21,24 @@ int waitSignal(void) {
         return -1;
     }
 
+    return 0;
+}
+
+int waitSignal(void) {
+    DBusMessage *message;
+    DBusMessageIter args;
+    DBusError error;
+    char *signalParam;
+
+    dbus_error_init(&error);
+
+    // set receive signal event.
+    if (setReceiveSignal() != 0) {
+        printf("Receive signal setting is failed.\n");
+        return -1;
+    }
+
+    printf("Waiting signal message with interface '%s'\n", DBUS_BUS_INTERFACE);
     while (1) {
         dbus_connection_read_write(g_connection, 0);
         message = dbus_connection_pop_message(g_connection);
@@ -35,6 +48,7 @@ int waitSignal(void) {
             continue;
         }
 
+        // Catch signal
         if (dbus_message_is_signal(message, DBUS_BUS_INTERFACE, DBUS_SIGNAL_NAME)) {
             if (!dbus_message_iter_init(message, &args)) {
                 printf("Message has no parameters.\n");
@@ -53,7 +67,22 @@ int waitSignal(void) {
                 printf("Signal value is '%s'.\n", signalParam);
                 signalParam = NULL;
             }
+            printf("=================================================\n");
         }
+
+        // Catch method call
+        if (dbus_message_is_method_call(message, DBUS_BUS_INTERFACE, DBUS_METHOD_NAME)) {
+            DBusMessage *reply;
+
+            printf("Received method call\n");
+            reply = dbus_message_new_method_return(message);
+
+            dbus_connection_send(g_connection, reply, NULL);
+            dbus_connection_flush(g_connection);
+            printf("Send reply.\n");
+            printf("=================================================\n");
+        }
+
         dbus_message_unref(message);
     }
     dbus_error_free(&error);

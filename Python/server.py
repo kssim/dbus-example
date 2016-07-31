@@ -16,7 +16,12 @@ class SystemDBus(dbus.service.Object):
 
     @dbus.service.method(DBUS_BUS_NAME)
     def reply_msg(self):
-        return "Hello Client~"
+        return ("Hello Client~")
+
+    @dbus.service.method(DBUS_BUS_NAME)
+    def send_arg_and_msg(self, arg1, arg2):
+        return ("Argument is " + arg1 + " " +arg2)
+
 
 
 if __name__ == '__main__':

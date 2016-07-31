@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <dbus/dbus.h>
 
 #define DBUS_BUS_NAME				"com.kssim.test"
@@ -10,6 +11,7 @@
 #define DBUS_BUS_INTERFACE    	 	"com.kssim.test.bus"
 #define DBUS_BUS_INTERFACE_PATH		"/com/kssim/test/bus"
 #define DBUS_SIGNAL_NAME        	"SignalTest"
+#define DBUS_METHOD_NAME        "MethodTest"
 
 DBusConnection *g_connection;
 

@@ -10,4 +10,7 @@ if __name__ == '__main__':
     system = bus.get_object(DBUS_BUS_NAME, DBUS_BUS_PATH)
 
     reply_message = system.get_dbus_method('reply_msg', DBUS_BUS_NAME)
+    send_arg_and_msg = system.get_dbus_method('send_arg_and_msg', DBUS_BUS_NAME)
+
     print(reply_message())
+    print(send_arg_and_msg('Hello', 'world'))
